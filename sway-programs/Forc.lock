@@ -1,4 +1,12 @@
 [[package]]
+name = "SimpleFutures"
+source = "member"
+dependencies = [
+    "pyth_interface",
+    "std",
+]
+
+[[package]]
 name = "core"
 source = "path+from-root-4BA3A18A2D620E67"
 
@@ -19,14 +27,6 @@ dependencies = ["std"]
 name = "std"
 source = "git+https://github.com/fuellabs/sway?tag=v0.64.0#2156bfbbee01ffb85bfca2aae8f185f8e7c715a4"
 dependencies = ["core"]
-
-[[package]]
-name = "test-contract"
-source = "member"
-dependencies = [
-    "pyth_interface",
-    "std",
-]
 
 [[package]]
 name = "test-predicate"

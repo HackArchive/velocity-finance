@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "fuels:dev": "fuels dev",
     "test": "vitest",
-    "test:ui": "./test/ui/test-ui.sh"
+    "test:ui": "./test/ui/test-ui.sh",
+    "types:gen": "fuels typegen -i sway-programs/contract/out/release/SimpleFutures-abi.json -o ./src/swap-api"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -25,7 +26,7 @@
     "bignumber.js": "^9.1.2",
     "clsx": "2.1.1",
     "dotenv": "^16.4.5",
-    "fuels": "^0.92.0",
+    "fuels": "^0.94.8",
     "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

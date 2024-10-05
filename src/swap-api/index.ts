@@ -6,8 +6,7 @@
 
 /*
   Fuels version: 0.94.8
-  Forc version: 0.64.0
-  Fuel-Core version: 0.36.0
 */
 
-export { TestScript } from './TestScript';
+export { SimpleFutures } from './SimpleFutures';
+export { SimpleFuturesFactory } from './SimpleFuturesFactory';
