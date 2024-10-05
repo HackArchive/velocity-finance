@@ -2,6 +2,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { describe, test, expect } from 'vitest';
 
+// 0xb933c7e9428063baae2892daeaee192a4b73aaaa77767d9e53463e140feec54c
 /**
  * Imports for the contract factory and bytecode, so that we can use them in the test.
  *

@@ -1,2 +1,7 @@
 [workspace]
 members = [ "contract", "predicate", "script" ]
+
+
+
+[deploy]
+node_url = "https://node-beta-1.fuel.network/graphql"
