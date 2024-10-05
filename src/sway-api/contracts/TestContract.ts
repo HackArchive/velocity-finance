@@ -28,12 +28,39 @@ const abi = {
   "encodingVersion": "1",
   "concreteTypes": [
     {
+      "type": "()",
+      "concreteTypeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+    },
+    {
       "type": "u64",
       "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
     }
   ],
   "metadataTypes": [],
   "functions": [
+    {
+      "inputs": [
+        {
+          "name": "_futuresExpiration",
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+        },
+        {
+          "name": "_maintenanceMargin",
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+        }
+      ],
+      "name": "constructor",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
+        }
+      ]
+    },
     {
       "inputs": [],
       "name": "get_count",
@@ -74,7 +101,23 @@ const abi = {
 
 const storageSlots: StorageSlot[] = [
   {
+    "key": "304cf8092321eec4e81aa27609bfabc39114a98a741e72cde509638dc3163f19",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "583f4907acbce82f6e68388e488dbb58f72a750e41ab35b3d9f8a5d7f7787d97",
+    "value": "0000000000000000000000000000000000000000000000000000000000000050"
+  },
+  {
     "key": "6e3c7b4f69bbff7132c3c3a62883a6868f47b0bc2a7f21605f29038cd9a5e05f",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "7c730ca8cc02a39348614bb92ce61841a1a02a6b8546ef20c8fd9973787fa786",
+    "value": "000000000000000000000000000000000000000000000000000000000000000a"
+  },
+  {
+    "key": "b166da2329ecf434195affd97fe9c630b69295d9ab55fc9bbd526f14d9df7f3f",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   }
 ];
@@ -85,6 +128,7 @@ export class TestContractInterface extends Interface {
   }
 
   declare functions: {
+    constructor: FunctionFragment;
     get_count: FunctionFragment;
     increment_counter: FunctionFragment;
   };
@@ -96,6 +140,7 @@ export class TestContract extends Contract {
 
   declare interface: TestContractInterface;
   declare functions: {
+    constructor: InvokeFunction<[_futuresExpiration: BigNumberish, _maintenanceMargin: BigNumberish], void>;
     get_count: InvokeFunction<[], BN>;
     increment_counter: InvokeFunction<[amount: BigNumberish], BN>;
   };
