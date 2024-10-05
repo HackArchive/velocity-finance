@@ -1,32 +1,91 @@
 contract;
 
-// The abi defines the blueprint for the contract.
-abi Counter {
-    #[storage(read)]
-    fn get_count() -> u64;
 
-    #[storage(write, read)]
-    fn increment_counter(amount: u64) -> u64;
+use std::{
+    asset::transfer,
+    auth::msg_sender,
+    block::height,
+    call_frames::msg_asset_id,
+    context::msg_amount,
+    hash::Hash,
+};
+
+pub enum UserError {
+    AmountCannotBeZero: (),
 }
 
-/// The storage variables for the contract.
-/// In this case, there is only one variable called `counter` which is initialized to 0.
+// The abi defines the blueprint for the contract.
+abi SimpleFutures {
+
+    #[storage(read, write)]
+    fn constructor(
+        _futuresExpiration: u64,
+        _maintenanceMargin: u64
+    );
+
+    #[storage(read, write)]
+    #[payable]
+    fn open_position(leverage: u64, isLong: bool);
+}
+
+ fn get_latest_price() -> u64 {
+        return 1000;
+    }
+
+struct Position {
+    size: u64,
+    isLong: bool,
+    margin: u64,
+    entryPrice: u64,
+    isOpen: bool,
+}
+
 storage {
     counter: u64 = 0,
+    positions: StorageMap<Identity, Position> = StorageMap::<Identity, Position> {},
+
+    leverageLimit: u64 = 10,  // 10x leverage
+    liquidationThreshold: u64 = 80, // Liquidate if margin drops to 80% of required
+
+    futuresExpiration: u64 = 0,
+    maintenanceMargin: u64 = 0,
 }
 
-impl Counter for Contract {
-    // The `get_count` function returns the current value of the counter.
-    #[storage(read)]
-    fn get_count() -> u64 {
-        storage.counter.read()
+impl SimpleFutures for Contract {
+
+    #[storage(read, write)]
+    fn constructor(
+        _futuresExpiration: u64,
+        _maintenanceMargin: u64
+    ) {
+        storage.futuresExpiration.write(_futuresExpiration);
+        storage.maintenanceMargin.write(_maintenanceMargin);
     }
 
-    // The `increment_counter` function increments the counter by the given amount.
-    #[storage(write, read)]
-    fn increment_counter(amount: u64) -> u64 {
-        let current = storage.counter.read();
-        storage.counter.write(current + amount);
-        storage.counter.read()
+    #[storage(read, write)]
+    #[payable]
+    fn open_position(leverage: u64, isLong: bool) {
+
+        let margin = msg_amount();
+        require(0 < margin, UserError::AmountCannotBeZero);
+        
+        require(leverage <= storage.leverageLimit.read(), "Leverage too high");
+
+        let positionSize = margin * leverage;
+        let entryPrice = get_latest_price();
+
+        let new_position = Position {
+            size: positionSize,
+            isLong: isLong,
+            margin: msg_amount(),
+            entryPrice: entryPrice,
+            isOpen: true
+        };
+
+        let sender = msg_sender().unwrap();
+
+        storage.positions.insert(sender, new_position);
+
     }
+
 }
