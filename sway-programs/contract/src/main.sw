@@ -10,6 +10,10 @@ use std::{
     hash::Hash,
 };
 
+use pyth_interface::{data_structures::price::{Price, PriceFeedId}, PythCore};
+
+const PYTH_CONTRACT_ID = 0x1ab91bc1402a187055d3e827017ace566a103ce2a4126517da5d656d6a436aea; // Testnet Contract
+const FUEL_ETH_BASE_ASSET_ID = 0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07;
 
 fn get_latest_price() -> u64 {
     return 10000;
@@ -31,7 +35,10 @@ abi SimpleFutures {
     #[storage(read)]
     fn get_position(isLong: bool) -> Position;
 
-    fn get_test() -> bool;
+    fn get_price(price_feed_id: PriceFeedId) -> Price;
+
+    #[storage(read, write)]
+    fn close_position(isLong: bool);
 
 }
 
@@ -129,8 +136,29 @@ impl SimpleFutures for Contract {
         }
     }
 
-    fn get_test() -> bool {
-        return true
+    #[storage(read, write)]
+    fn close_position(isLong: bool) {
+
+        if isLong {
+            let mut curr_position = storage.long.read();
+            curr_position.isOpen = true;
+
+            storage.long.write(curr_position);
+        } else {
+            let mut curr_position = storage.short.read();
+            curr_position.isOpen = true;
+
+            storage.short.write(curr_position);
+        }
+
+    }
+
+    // liquidate collatera on leverageMargin
+
+    fn get_price(price_feed_id: PriceFeedId) -> Price {
+        let pyth_contract = abi(PythCore, PYTH_CONTRACT_ID);
+        let price = pyth_contract.price(price_feed_id);
+        price
     }
 
 
