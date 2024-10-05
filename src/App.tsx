@@ -7,14 +7,15 @@ import Trade from "./pages/Trade";
 export default function App() {
   return (
     <div>
-      <BrowserRouter>
+      <Home />
+      {/* <BrowserRouter>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/faucet" element={<Base />} />
           <Route path="/trade/:symbol" element={<Trade />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </div>
   );
 }

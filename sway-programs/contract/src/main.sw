@@ -12,7 +12,7 @@ use std::{
 
 use pyth_interface::{data_structures::price::{Price, PriceFeedId}, PythCore};
 
-const PYTH_CONTRACT_ID = 0x1ab91bc1402a187055d3e827017ace566a103ce2a4126517da5d656d6a436aea; // Testnet Contract
+const PYTH_CONTRACT_ID = 0x73591bf32f010ce4e83d86005c24e7833b397be38014ab670a73f6fde59ad607; // Testnet Contract
 const FUEL_ETH_BASE_ASSET_ID = 0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07;
 
 fn get_latest_price() -> u64 {
