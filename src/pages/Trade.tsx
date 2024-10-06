@@ -10,6 +10,7 @@ import { getSymbolPrice } from "../utils/GetSymbolPrice";
 import { useWallet } from "@fuels/react";
 import { SimpleFutures } from "../swap-api";
 import { BN } from "fuels";
+import { toast } from "react-toastify";
 
 
 const marks = [
@@ -37,20 +38,66 @@ export default function Trade() {
 
   const [comfirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { wallet, refetch } = useWallet();
+
+
+  const _contract = new SimpleFutures(process.env.VITE_TESTNET_CONTRACT_ID!, wallet!);
+
+  // const openPosition = async () => {
+
+  //   const ethPrice = await getSymbolPrice("ETHUSD");
+
+  //   let isLong = true;
+  //   if (trade.orderType === "SHORT") {
+  //     isLong = false;
+  //   }
+  //   const eth_margin = (trade.margin! / ethPrice) * 1000000;
+
+  //   _contract.functions.open_position(1, isLong).callParams({
+  //     forward: [eth_margin, BASE_ASSET_ID],
+  //     gasLimit: new BN(1000000)
+
+  //   }).call();
+  // }
+
+
+  const handleComfimTrade = async () => {
+
+    const data = {
+      "type": trade.orderType === "LONG" ? "buy" : "sell",                     // Type: "buy" or "sell"
+      "price": trade.margin!.toFixed(2),                  // Price of the asset
+      "amount": trade.contractSize,                     // Amount to buy/sell
+      "userAddress": wallet?.address.toString(),   // User's wallet or address
+      "contractAddress": "0x123456789"   // Contract or asset address
+    }
+    
+    const resp = await fetch("http://localhost:3000/order",{
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+
+    const jsn = await resp.json();
+    console.log(jsn)
+
+    setConfirmationModalOpen(false);
+    toast.success("Order Placed")
+
+
+}
+
 
   const currentSymbol =
     Object.entries(Symbols)
       .find(([key]) => key === symbol)?.[0]
       .replace("USD", "") || undefined;
 
-  const handleComfimTrade = () => {
-    console.log("Trade Confirmed");
-  };
-
 
     // Get current eth Price
     useEffect(() => {
-      getSymbolPrice("ETH").then((val) => {
+      getSymbolPrice("ETHUSD").then((val) => {
         setValue("ethPrice",val);
       })
     }, [])
@@ -71,6 +118,47 @@ export default function Trade() {
   const { register, handleSubmit, setValue, watch } = form;
 
   const trade = watch();
+
+  useEffect(() => {
+    // Initialize WebSocket connection
+    const socket = new WebSocket('ws://localhost:8080/ws');
+
+    // Handle connection open event
+    socket.onopen = () => {
+      console.log('WebSocket connection established.');
+
+      // Subscribe to a specific topic (if required by your backend)
+      socket.send(JSON.stringify({
+        "type": "subscribe",
+        "userAddress":wallet?.address.toString()
+    }));
+    };
+
+    // Handle incoming messages
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      toast.success("Order Successfully Matched");
+
+      console.log('Message received:', data);
+      // setMessage(data.message);  // Assume the message is in `data.message`
+    };
+
+    // Handle WebSocket close
+    socket.onclose = () => {
+      console.log('WebSocket connection closed.');
+    };
+
+    // Handle WebSocket errors
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    // Cleanup on component unmount
+    return () => {
+      socket.close();
+    };
+  }, []);
 
 
 

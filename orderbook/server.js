@@ -1,11 +1,53 @@
 const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
 const Redis = require('ioredis');
 const { v4: uuidv4 } = require('uuid');
+const cors = require("cors");
 
 const app = express();
 const redis = new Redis();
 
 app.use(express.json());
+app.use(cors());
+
+// WebSocket server setup
+const wss = new WebSocket.Server({ port: 8080 });
+
+const clients = new Map();
+
+wss.on('connection', (ws) => {
+  const id = uuidv4();
+  const metadata = { id };
+
+  clients.set(ws, metadata);
+
+  console.log(`New WebSocket connection: ${id}`);
+
+  ws.on('message', (messageAsString) => {
+    const message = JSON.parse(messageAsString);
+    const metadata = clients.get(ws);
+
+    if (message.type === 'subscribe') {
+      metadata.userAddress = message.userAddress;
+      console.log(`Client ${metadata.id} subscribed to address ${metadata.userAddress}`);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log(`WebSocket connection closed: ${id}`);
+    clients.delete(ws);
+  });
+});
+
+function notifyUser(userAddress, message) {
+  const matchingClients = Array.from(clients.entries())
+    .filter(([client, metadata]) => metadata.userAddress === userAddress);
+  
+  matchingClients.forEach(([client, metadata]) => {
+    client.send(JSON.stringify(message));
+  });
+}
 
 // Helper function to create a new order
 async function createOrder(type, price, amount, userAddress, contractAddress) {
@@ -41,6 +83,20 @@ async function matchOrders() {
       await redis.hset(`orders:${buyOrderId}`, 'amount', parseFloat(buyOrder.amount) - matchedAmount);
       await redis.hset(`orders:${sellOrderId}`, 'amount', parseFloat(sellOrder.amount) - matchedAmount);
 
+      // Notify users
+      notifyUser(buyOrder.userAddress, {
+        type: 'orderMatched',
+        order: buyOrder,
+        matchedAmount,
+        matchPrice
+      });
+      notifyUser(sellOrder.userAddress, {
+        type: 'orderMatched',
+        order: sellOrder,
+        matchedAmount,
+        matchPrice
+      });
+
       // Remove filled orders
       if (parseFloat(buyOrder.amount) - matchedAmount <= 0) {
         await redis.zrem('orderbook:buy', buyOrderId);
@@ -53,7 +109,6 @@ async function matchOrders() {
         sellIndex += 2;
       }
 
-      // Log the match (in a real system, you'd probably want to store this in a database)
       console.log(`Matched: ${matchedAmount} @ ${matchPrice} (Buy: ${buyOrderId}, Sell: ${sellOrderId})`);
     } else {
       break;
@@ -124,7 +179,9 @@ app.get('/orders/:userAddress', async (req, res) => {
   res.json(userOrders);
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Order matching engine listening on port ${PORT}`);
+const EXPRESS_PORT = process.env.EXPRESS_PORT || 3000;
+app.listen(EXPRESS_PORT, () => {
+  console.log(`Express server listening on port ${EXPRESS_PORT}`);
 });
+
+console.log(`WebSocket server listening on ws://localhost:8080`);
