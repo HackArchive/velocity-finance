@@ -4,7 +4,7 @@ export const orderBookEntries: OrderBook[] = [
   {
     id: "1",
     type: "sell",
-    price: "145",
+    price: "2615",
     amount: "5",
     userAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
     contractAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
@@ -13,7 +13,7 @@ export const orderBookEntries: OrderBook[] = [
   {
     id: "2",
     type: "buy",
-    price: "155",
+    price: "2590",
     amount: "7",
     userAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
     contractAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
@@ -22,7 +22,7 @@ export const orderBookEntries: OrderBook[] = [
   {
     id: "3",
     type: "sell",
-    price: "140",
+    price: "2620",
     amount: "2",
     userAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
     contractAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
@@ -31,7 +31,7 @@ export const orderBookEntries: OrderBook[] = [
   {
     id: "4",
     type: "buy",
-    price: "160",
+    price: "2580",
     amount: "1",
     userAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
     contractAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
@@ -40,7 +40,7 @@ export const orderBookEntries: OrderBook[] = [
   {
     id: "5",
     type: "sell",
-    price: "135",
+    price: "2635",
     amount: "1",
     userAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
     contractAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
@@ -49,7 +49,7 @@ export const orderBookEntries: OrderBook[] = [
   {
     id: "6",
     type: "buy",
-    price: "165",
+    price: "2600",
     amount: "3",
     userAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
     contractAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
@@ -58,7 +58,7 @@ export const orderBookEntries: OrderBook[] = [
   {
     id: "7",
     type: "sell",
-    price: "130",
+    price: "2595",
     amount: "5",
     userAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
     contractAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
@@ -67,7 +67,7 @@ export const orderBookEntries: OrderBook[] = [
   {
     id: "8",
     type: "buy",
-    price: "170",
+    price: "2605",
     amount: "4",
     userAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
     contractAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
@@ -76,7 +76,7 @@ export const orderBookEntries: OrderBook[] = [
   {
     id: "9",
     type: "sell",
-    price: "125",
+    price: "2585",
     amount: "1",
     userAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
     contractAddress: "0xbd70811d431bfb290654946c95d107a49e020d2663dbf066ba9122bdecd05721",
