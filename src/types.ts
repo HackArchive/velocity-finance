@@ -11,4 +11,5 @@ export interface Trade {
   leverage?: number;
   limitPrice?: number;
   margin?: number;
+  ethPrice: number;
 }

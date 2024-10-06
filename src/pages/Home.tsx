@@ -50,10 +50,10 @@ export default function Home() {
     let m = (await contract?.functions.get_contract_margin().get())?.value;
     console.log(m?.toString())
     // await contract?.functions.close_positi on(true).call();
-    // let d = await contract?.functions.open_position(1,true).callParams({
-    //   forward: [111, BASE_ASSET_ID],
-    //   gasLimit: new BN(1000000)
-    // }).call();
+    let d = await contract?.functions.open_position(1,true).callParams({
+      forward: [111, BASE_ASSET_ID],
+      gasLimit: new BN(1000000)
+    }).call();
 
     // console.log(d,"=====");
 

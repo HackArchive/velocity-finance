@@ -7,6 +7,10 @@ import LabelledTextField from "../components/LabelledTextField";
 import TradingViewWidget from "../components/TradingView";
 import { Symbols, type Trade } from "../types";
 import { getSymbolPrice } from "../utils/GetSymbolPrice";
+import { useWallet } from "@fuels/react";
+import { SimpleFutures } from "../swap-api";
+import { BN } from "fuels";
+
 
 const marks = [
   {
@@ -30,8 +34,10 @@ const marks = [
 export default function Trade() {
   const { symbol } = useParams();
   const [price, setPrice] = useState<number>(0);
+
   const [comfirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const navigate = useNavigate();
+
   const currentSymbol =
     Object.entries(Symbols)
       .find(([key]) => key === symbol)?.[0]
@@ -41,6 +47,15 @@ export default function Trade() {
     console.log("Trade Confirmed");
   };
 
+
+    // Get current eth Price
+    useEffect(() => {
+      getSymbolPrice("ETH").then((val) => {
+        setValue("ethPrice",val);
+      })
+    }, [])
+
+
   const form = useForm<Trade>({
     defaultValues: {
       orderType: "LONG",
@@ -49,12 +64,16 @@ export default function Trade() {
       limitPrice: 0,
       symbol: undefined,
       margin: 0,
+      ethPrice: 0
     },
   });
 
   const { register, handleSubmit, setValue, watch } = form;
 
   const trade = watch();
+
+
+
   useEffect(() => {
     const getPrice = async () => {
       const price = await getSymbolPrice(symbol as string);
@@ -135,7 +154,8 @@ export default function Trade() {
             <button
               onClick={handleSubmit(() => setConfirmationModalOpen(true))}
               className="w-full glass border py-2 text-white rounded mt-10"
-            >
+            > 
+
               Submit Order
             </button>
           </div>
