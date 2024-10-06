@@ -1,4 +1,4 @@
-import { useWallet } from "@fuels/react";
+import { useAccount, useWallet } from "@fuels/react";
 import { Slider } from "@mui/material";
 import { BN } from "fuels";
 import { useEffect, useState } from "react";
@@ -40,6 +40,7 @@ export default function Trade() {
 
   const [comfirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const { wallet, refetch } = useWallet();
+  const { account } = useAccount();
 
   const _contract = new SimpleFutures(process.env.VITE_TESTNET_CONTRACT_ID!, wallet!);
 
@@ -89,14 +90,11 @@ export default function Trade() {
   const trade = watch();
 
   useEffect(() => {
-    // Initialize WebSocket connection
     const socket = new WebSocket("ws://localhost:8080/ws");
 
-    // Handle connection open event
     socket.onopen = () => {
       console.log("WebSocket connection established.");
 
-      // Subscribe to a specific topic (if required by your backend)
       socket.send(
         JSON.stringify({
           type: "subscribe",
@@ -105,7 +103,6 @@ export default function Trade() {
       );
     };
 
-    // Handle incoming messages
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
@@ -115,17 +112,14 @@ export default function Trade() {
       // setMessage(data.message);  // Assume the message is in `data.message`
     };
 
-    // Handle WebSocket close
     socket.onclose = () => {
       console.log("WebSocket connection closed.");
     };
 
-    // Handle WebSocket errors
     socket.onerror = (error) => {
       console.error("WebSocket error:", error);
     };
 
-    // Cleanup on component unmount
     return () => {
       socket.close();
     };
@@ -196,9 +190,30 @@ export default function Trade() {
           <div className="h-[70vh]">
             <TradingViewWidget key={symbol} symbol={`PYTH:${symbol}`} />{" "}
           </div>
-          <div className="p-5 border-[0.5px] border-[#393939]">
+          <div className="p-5 border-[0.5px] border-[#393939] h-[35vh]">
             <h1>Postions</h1>
             <hr className="border w-full border-[#393939] my-2" />
+            <div className="flex flex-col h-full gap-1">
+              <div className="justify-between flex flex-row font-semibold mb-2">
+                <h1>Symbol</h1>
+                <h2>Price</h2>
+                <div>Order Type</div>
+              </div>
+              {trades
+                .filter((item) => item.symbol === symbol && item.address === account)
+                .slice(0, 5)
+                .map((item) => (
+                  <div className="justify-between flex flex-row text-sm">
+                    <h1>{item.symbol}</h1>
+                    <h2>{((item.margin! * item.leverage!) / item.contractSize) * 1000}</h2>
+                    <div
+                      className={`py-1 px-2 w-20 rounded ${item.orderType === "LONG" ? "bg-[#34c38f2e] text-[#34c38f]" : "bg-[#f46a6a2e] text-[#f46a6a]"}`}
+                    >
+                      {item.orderType}
+                    </div>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
         <FormProvider {...form}>
@@ -262,7 +277,7 @@ export default function Trade() {
                 </button>
               </div>
             </div>
-            <div className="p-5 border-[0.5px] border-[#393939]">
+            <div className="p-5 border-[0.5px] border-[#393939] h-[35vh]">
               <h1>Order Book</h1>
               <hr className="border w-full border-[#393939] my-2" />
               <div className="flex flex-row gap-2">
