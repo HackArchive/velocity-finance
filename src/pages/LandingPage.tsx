@@ -109,7 +109,7 @@ export default function LandingPage() {
             <p>Fast, secure, and decentralized trading at your fingertips.</p>
             <button
               onClick={() => {
-                navigate("/trade/BTCUSD");
+                navigate("/trade/ETHUSD");
               }}
               className="mt-5 w-fit glass border rounded-full font-bold text-lg py-2 px-6 hover:scale-105 transition-all"
             >

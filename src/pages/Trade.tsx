@@ -9,9 +9,9 @@ import ConfirmationModal from "../components/confirmation-modal/ConfirmationModa
 import LabelledTextField from "../components/LabelledTextField";
 import TradingViewWidget from "../components/TradingView";
 import { SimpleFutures } from "../swap-api";
-import { Symbols, type Trade } from "../types";
+import { OrderBook, Symbols, type Trade } from "../types";
 import { getSymbolPrice } from "../utils/GetSymbolPrice";
-import { orderBookEntries } from "../utils/TradeModel";
+// import { orderBookEntries } from "../utils/TradeModel";
 
 const BASE_ASSET_ID = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07";
 
@@ -37,6 +37,7 @@ const marks = [
 export default function Trade() {
   const { symbol } = useParams();
   const [price, setPrice] = useState<number>(0);
+  const [orderBookEntries, setOrderBookEntries] = useState<OrderBook[]>([]);
 
   const [comfirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const { wallet, refetch } = useWallet();
@@ -102,6 +103,8 @@ export default function Trade() {
         })
       );
     };
+
+    console.log(orderBookEntries)
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -183,6 +186,25 @@ export default function Trade() {
     toast.success("Order Placed");
   };
 
+
+  const getOrderBookEntries = async () => {
+  
+    const resp = await fetch("http://localhost:3000/orders", {
+      method: "GET",
+    });
+
+    const jsn: OrderBook[] = await resp.json();
+    console.log(jsn);
+    setOrderBookEntries(jsn)
+   
+  };
+
+  useEffect(() => {
+    getOrderBookEntries();
+    const intervalId = setInterval(getOrderBookEntries, 5000); 
+    return () => clearInterval(intervalId);
+  }, []); 
+
   return (
     <div className="min-h-screen py-20 lg:px-4  text-white">
       <div className="flex flex-row gap-4">
@@ -200,7 +222,7 @@ export default function Trade() {
                 <div>Order Type</div>
               </div>
               {orderBookEntries
-                .filter((item) => item.userAddress === account)
+                // .filter((item) => item.userAddress === account)
                 .slice(0, 5)
                 .map((item) => (
                   <div className="justify-between flex flex-row text-sm">
