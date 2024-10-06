@@ -57,18 +57,16 @@ export default function LandingPage() {
     let btcP = await getSymbolPrice("BTCUSD");
     let solP = await getSymbolPrice("SOLUSD");
 
-    useBitcoin(Math.round(btcP * 100)/100);
-    useEth(Math.round(ethP * 100)/100)
-    useSolana(Math.round(solP * 100)/100)
-
-  }
+    useBitcoin(Math.round(btcP * 100) / 100);
+    useEth(Math.round(ethP * 100) / 100);
+    useSolana(Math.round(solP * 100) / 100);
+  };
 
   useEffect(() => {
     getPrices();
-    const intervalId = setInterval(getPrices, 1000); 
+    const intervalId = setInterval(getPrices, 1000);
     return () => clearInterval(intervalId);
-  }, []); 
-
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -90,7 +88,7 @@ export default function LandingPage() {
             </div>
           </Link>
           <Link
-            to="/trade/BTCUSD"
+            to="/trade/ETHUSD"
             className="absolute top-[10vh] right-0 gap-2 text-xl opacity-40 hover:opacity-100 transition-all"
           >
             <img src="/line3.png" alt="" className="w-80 h-20 object-contain" />
@@ -103,7 +101,7 @@ export default function LandingPage() {
             </div>
           </Link>
           <Link
-            to="/trade/BTCUSD"
+            to="/trade/SOLUSD"
             className="absolute bottom-[10vh] left-0 gap-2 text-xl opacity-40 hover:opacity-100 transition-all"
           >
             <div className="inline-flex mb-5 ml-10 gap-2 text-base">
