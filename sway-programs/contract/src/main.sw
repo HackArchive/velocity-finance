@@ -10,14 +10,13 @@ use std::{
     hash::Hash,
 };
 
+
+
 use pyth_interface::{data_structures::price::{Price, PriceFeedId}, PythCore};
 
 const PYTH_CONTRACT_ID = 0x73591bf32f010ce4e83d86005c24e7833b397be38014ab670a73f6fde59ad607; // Testnet Contract
 const FUEL_ETH_BASE_ASSET_ID = 0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07;
 
-fn get_latest_price() -> u64 {
-    return 10000;
-}
 
 // The abi defines the blueprint for the contract.
 abi SimpleFutures {
@@ -27,6 +26,7 @@ abi SimpleFutures {
         _futuresExpiration: u64,
         _maintenanceMargin: u64,
         _leverage_divident: u64,
+        _asset_price: u64
     );
 
     #[storage(read, write), payable]
@@ -39,6 +39,12 @@ abi SimpleFutures {
 
     #[storage(read, write)]
     fn close_position(isLong: bool);
+
+    #[storage(write)]
+    fn set_asset_price(_asset_price: u64);
+
+    #[storage(read)]
+    fn get_contract_margin() -> u64;
 
 }
 
@@ -70,6 +76,7 @@ storage {
 
     futuresExpiration: u64 = 0,
     maintenanceMargin: u64 = 0,
+    asset_price: u64 = 0,
 
 }
 
@@ -80,17 +87,17 @@ impl SimpleFutures for Contract {
         _futuresExpiration: u64,
         _maintenanceMargin: u64,
         _leverage_divident: u64,
+        _asset_price: u64
     ) {
         storage.futuresExpiration.write(_futuresExpiration);
         storage.maintenanceMargin.write(_maintenanceMargin);
-
-
+        storage.asset_price.write(_asset_price);
         storage.leverage_divident.write(_leverage_divident);
 
     }
 
     #[storage(read, write), payable]
-    fn open_position(leverage: u64, isLong: bool) {
+    fn open_position(leverage: u64, isLong: bool, ) {
 
         let margin = msg_amount();
         // let margin = 1000;
@@ -108,9 +115,11 @@ impl SimpleFutures for Contract {
 
         let leverage_div = storage.leverage_divident.read();
 
-        let c_margin = get_latest_price() / leverage_div;
+        let latest_asset_price = storage.asset_price.read();
 
-        let entryPrice = get_latest_price();
+        let c_margin = latest_asset_price / leverage_div;
+
+        let entryPrice = latest_asset_price;
 
         let new_position = Position {
             margin: c_margin,
@@ -120,13 +129,12 @@ impl SimpleFutures for Contract {
         };
 
 
-        let asset = AssetId::default();
-        let address = Address::from_str("0xbf3d9e1f3d78fd8c16683ac17e6986bbed745884c05ad0878ea04ac1d1b0d7c6");
+        // let asset = AssetId::from(0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07);
 
         // transfer(
-        //     Address::from_str("0xbf3d9e1f3d78fd8c16683ac17e6986bbed745884c05ad0878ea04ac1d1b0d7c6"),
+        //     Identity::Address(Address::from(0xbf3d9e1f3d78fd8c16683ac17e6986bbed745884c05ad0878ea04ac1d1b0d7c6)),
         //     asset,
-        //     1111111
+        //     111
         // );
 
         if isLong {
@@ -171,5 +179,19 @@ impl SimpleFutures for Contract {
         price
     }
 
+    #[storage(write)]
+    fn set_asset_price(_asset_price: u64) {
+        storage.asset_price.write(_asset_price);
+    }
+
+    #[storage(read)]
+    fn get_contract_margin() -> u64 {
+        
+        let latest_asset_price: u64 = storage.asset_price.read();
+        let leverage_div: u64 = storage.leverage_divident.read();
+        let c_margin = latest_asset_price / leverage_div;
+
+        return c_margin;
+    }
 
 }

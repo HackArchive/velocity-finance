@@ -188,6 +188,10 @@ const abi = {
         {
           "name": "_leverage_divident",
           "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+        },
+        {
+          "name": "_asset_price",
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         }
       ],
       "name": "constructor",
@@ -198,6 +202,19 @@ const abi = {
           "arguments": [
             "read",
             "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "get_contract_margin",
+      "output": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0",
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
           ]
         }
       ]
@@ -257,6 +274,24 @@ const abi = {
           "arguments": []
         }
       ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "_asset_price",
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+        }
+      ],
+      "name": "set_asset_price",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "write"
+          ]
+        }
+      ]
     }
   ],
   "loggedTypes": [
@@ -284,6 +319,10 @@ const storageSlots: StorageSlot[] = [
   },
   {
     "key": "b166da2329ecf434195affd97fe9c630b69295d9ab55fc9bbd526f14d9df7f3f",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "cff5eb3ad5fc210f97e013e4fd25839761440f94cd2cd9ce911ed8bbae21fda6",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
@@ -316,9 +355,11 @@ export class SimpleFuturesInterface extends Interface {
   declare functions: {
     close_position: FunctionFragment;
     constructor: FunctionFragment;
+    get_contract_margin: FunctionFragment;
     get_position: FunctionFragment;
     get_price: FunctionFragment;
     open_position: FunctionFragment;
+    set_asset_price: FunctionFragment;
   };
 }
 
@@ -329,10 +370,12 @@ export class SimpleFutures extends Contract {
   declare interface: SimpleFuturesInterface;
   declare functions: {
     close_position: InvokeFunction<[isLong: boolean], void>;
-    constructor: InvokeFunction<[_futuresExpiration: BigNumberish, _maintenanceMargin: BigNumberish, _leverage_divident: BigNumberish], void>;
+    constructor: InvokeFunction<[_futuresExpiration: BigNumberish, _maintenanceMargin: BigNumberish, _leverage_divident: BigNumberish, _asset_price: BigNumberish], void>;
+    get_contract_margin: InvokeFunction<[], BN>;
     get_position: InvokeFunction<[isLong: boolean], PositionOutput>;
     get_price: InvokeFunction<[price_feed_id: string], PriceOutput>;
     open_position: InvokeFunction<[leverage: BigNumberish, isLong: boolean], void>;
+    set_asset_price: InvokeFunction<[_asset_price: BigNumberish], void>;
   };
 
   constructor(

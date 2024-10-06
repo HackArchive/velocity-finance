@@ -7,7 +7,8 @@ import {
   useIsConnected,
   useWallet,
 } from "@fuels/react";
-import { Contract, Provider } from "fuels";
+import { AbstractContract, BN, Contract, Provider } from "fuels";
+
 
 import { useEffect, useState } from "react";
 import { providerUrl } from "../lib";
@@ -21,7 +22,6 @@ export default function Home() {
 
   const PYTH_CONTRACT_ID = "0x73591bf32f010ce4e83d86005c24e7833b397be38014ab670a73f6fde59ad607";
 
-  const [connector, setConnector] = useState("");
   const [provider, setProvider] = useState<Provider>();
   const [contract, setContract] = useState<SimpleFutures>();
 
@@ -44,23 +44,27 @@ export default function Home() {
     setProvider(_provider);
     setContract(_contract);
 
-    const pythContract = new Contract(PYTH_CONTRACT_ID, PYTH_CONTRACT_ABI, wallet);
+    const BASE_ASSET_ID = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07"; 
 
-    let d = await contract?.functions
-      .get_price("0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace")
-      .addContracts([pythContract])
-      .get();
-    console.log(d);
-  };
+    // await contract?.functions.set_asset_price(325780000).call();
+    let m = (await contract?.functions.get_contract_margin().get())?.value;
+    console.log(m?.toString())
+    // await contract?.functions.close_positi on(true).call();
+    // let d = await contract?.functions.open_position(1,true).callParams({
+    //   forward: [111, BASE_ASSET_ID],
+    //   gasLimit: new BN(1000000)
+    // }).call();
 
-  useEffect(() => {
-    connect();
-    setProviderFunc();
-    console.log(isConnected);
-  }, []);
+    // console.log(d,"=====");
+
+
+    
+  }
+
+
 
   return (
-    <div className="w-full h-[100vh] bg-[#141414] text-white">
+    <div className="w-full h-[100vh] bg-white mt-[100px]">
       <div className="flex flex-col items-start">
         <label className="mb-2" htmlFor="wallet">
           Wallet Address
@@ -87,6 +91,7 @@ export default function Home() {
             </button>
           )}
         </div>
+        <button onClick={setProviderFunc}>Open Position</button>
       </div>
     </div>
   );
