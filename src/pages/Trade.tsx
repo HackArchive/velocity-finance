@@ -204,7 +204,7 @@ export default function Trade() {
                 .slice(0, 5)
                 .map((item) => (
                   <div className="justify-between flex flex-row text-sm">
-                    <h1>{item.symbol}</h1>
+                    <h1>{item.symbol.replace("USD", "")}</h1>
                     <h2>{((item.margin! * item.leverage!) / item.contractSize) * 1000}</h2>
                     <div
                       className={`py-1 px-2 w-20 rounded ${item.orderType === "LONG" ? "bg-[#34c38f2e] text-[#34c38f]" : "bg-[#f46a6a2e] text-[#f46a6a]"}`}
