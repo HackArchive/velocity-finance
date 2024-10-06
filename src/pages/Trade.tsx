@@ -208,9 +208,9 @@ export default function Trade() {
                     <h1>ETH</h1>
                     <h2>{item.price}</h2>
                     <div
-                      className={`py-1 px-2 w-20 rounded ${item.type === "BUY" ? "bg-[#34c38f2e] text-[#34c38f]" : "bg-[#f46a6a2e] text-[#f46a6a]"}`}
+                      className={`py-1 px-2 w-20 rounded ${item.type === "buy" ? "bg-[#34c38f2e] text-[#34c38f]" : "bg-[#f46a6a2e] text-[#f46a6a]"}`}
                     >
-                      {item.type === "BUY" ? "Long" : "Short"}
+                      {item.type === "buy" ? "Long" : "Short"}
                     </div>
                   </div>
                 ))}
