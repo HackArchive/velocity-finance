@@ -100,7 +100,7 @@ export default function Trade() {
         </div>
       </div>
       <FormProvider {...form}>
-        <div className="w-1/3 bg-[#141414] lg:h-[79vh]">
+        <div className="w-1/3 bg-[#141414] lg:h-[60vh] shadow-xl">
           <div className="flex flex-row text-white border-b border-gray-700">
             <div
               onClick={() => setValue("orderType", "LONG")}
@@ -117,7 +117,7 @@ export default function Trade() {
             </div>
           </div>
 
-          <div className="flex flex-col p-4 gap-4 ">
+          <div className="flex flex-col p-4 gap-4">
             <div className="flex flex-col">
               <div className="flex flex-col w-full text-white">
                 <h1 className="text-[0.9rem] pb-1">Contract Count</h1>

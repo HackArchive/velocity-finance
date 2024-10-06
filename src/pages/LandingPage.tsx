@@ -1,4 +1,48 @@
+import AddchartTwoToneIcon from "@mui/icons-material/AddchartTwoTone";
+import AlignVerticalBottomTwoToneIcon from "@mui/icons-material/AlignVerticalBottomTwoTone";
+import CurrencyBitcoinTwoToneIcon from "@mui/icons-material/CurrencyBitcoinTwoTone";
+import SecurityTwoToneIcon from "@mui/icons-material/SecurityTwoTone";
+import ShowChartTwoToneIcon from "@mui/icons-material/ShowChartTwoTone";
+import SyncAltTwoToneIcon from "@mui/icons-material/SyncAltTwoTone";
 import { Link, useNavigate } from "react-router-dom";
+const features: { icon: JSX.Element; title: string; description: string }[] = [
+  {
+    icon: <ShowChartTwoToneIcon sx={{ fontSize: "40px", my: 1 }} />,
+    title: "Perpetual Contracts",
+    description:
+      "Trade Without Expiration - Engage in perpetual futures trading with no expiration dates, allowing you to hold positions as long as you want. Take advantage of market volatility without the pressure of contract expiration.",
+  },
+  {
+    icon: <CurrencyBitcoinTwoToneIcon sx={{ fontSize: "40px", my: 1 }} />,
+    title: "Multiple Cryptocurrencies Supported",
+    description:
+      "Diverse Market Access - Trade a variety of cryptocurrencies with ease. Velocity Finance supports multiple tokens, giving you the flexibility to diversify your trading portfolio and capitalize on opportunities across different assets.",
+  },
+  {
+    icon: <AlignVerticalBottomTwoToneIcon sx={{ fontSize: "40px", my: 1 }} />,
+    title: "Customizable Leverage",
+    description:
+      "Amplify Your Returns - Choose the leverage that fits your trading strategy, ranging from low to high risk. Increase your exposure to the market and unlock greater potential for profits with tailored leverage options.",
+  },
+  {
+    icon: <SyncAltTwoToneIcon sx={{ fontSize: "40px", my: 1 }} />,
+    title: "Low Transaction Fees",
+    description:
+      "Keep More of Your Profits - Velocity Finance offers some of the lowest fees in the market, allowing traders to keep more of what they earn. Enjoy competitive rates with no hidden costs or surprises.",
+  },
+  {
+    icon: <AddchartTwoToneIcon sx={{ fontSize: "40px", my: 1 }} />,
+    title: "Advanced Trading Tools",
+    description:
+      "Trade Like a Pro - Access real-time charts, order book data, and market insights to make informed decisions. Use advanced order types like limit, stop-loss, and market orders to execute your strategy with precision.",
+  },
+  {
+    icon: <SecurityTwoToneIcon sx={{ fontSize: "40px", my: 1 }} />,
+    title: "Secure and Open Source",
+    description:
+      "Open Source Security - Velocity Finance's code is fully open source, allowing anyone to review it, ensuring transparency and security for your funds and trades.",
+  },
+];
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -72,6 +116,37 @@ export default function LandingPage() {
               Trade Now
             </button>
           </div>
+        </div>
+      </div>
+      <div
+        className="py-10 px-60 w-full h-full"
+        style={{
+          backgroundColor: "#141414",
+          backgroundImage: `
+          radial-gradient(circle at 78% 27%, #97a9ab42 10%, transparent 30.05%),
+          radial-gradient(circle at 14% 60%, #b8cfbd25 5%, transparent 20.05%)
+        `,
+        }}
+      >
+        <div className="flex flex-row w-full justify-between items-center">
+          <h1 className="text-4xl leading-snug w-1/2">
+            Leverage Your Gains,
+            <br /> Maximize Your <span className="text-green-400">Returns</span>
+          </h1>
+          <p className="w-1/2">
+            At Velocity Finance, unlock the power of leverage to amplify your profits. Our platform lets you trade with
+            precision, maximizing your returns on every move while managing risk effectively. Trade smarter and reach
+            new profit heights.
+          </p>
+        </div>
+        <div className="grid grid-cols-3 gap-4 mt-10 ">
+          {features.map((feature) => (
+            <div className="glass p-4 flex flex-col gap-4 rounded-xl">
+              <div>{feature.icon}</div>
+              <h2 className="text-lg font-semibold">{feature.title}</h2>
+              <p className="text-sm">{feature.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
