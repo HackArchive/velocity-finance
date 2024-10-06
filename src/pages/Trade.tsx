@@ -1,7 +1,7 @@
 import { Button, Slider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ConfirmationModal from "../components/confirmation-modal/ConfirmationModal";
 import LabelledTextField from "../components/LabelledTextField";
 import TradingViewWidget from "../components/TradingView";
@@ -12,6 +12,7 @@ export default function Trade() {
   const { symbol } = useParams();
   const [price, setPrice] = useState<number>(0);
   const [comfirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const navigate = useNavigate();
   const currentSymbol =
     Object.entries(Symbols)
       .find(([key]) => key === symbol)?.[0]
@@ -53,7 +54,7 @@ export default function Trade() {
     <div className="min-h-screen pt-20 lg:px-4 flex flex-row gap-4 text-white">
       <div className="flex flex-col gap-4 w-full">
         <div className="h-[70vh]">
-          <TradingViewWidget symbol={`PYTH:${symbol}`} />{" "}
+          <TradingViewWidget key={symbol} symbol={`PYTH:${symbol}`} />{" "}
         </div>
       </div>
       <FormProvider {...form}>

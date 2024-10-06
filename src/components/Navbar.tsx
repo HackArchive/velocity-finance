@@ -1,17 +1,20 @@
-import { useConnectUI, useDisconnect, useIsConnected, useWallet } from "@fuels/react";
+import { useAccount, useConnectUI, useDisconnect, useIsConnected } from "@fuels/react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useState } from "react";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Symbols } from "../types";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { connect } = useConnectUI();
   const { disconnect } = useDisconnect();
   const { isConnected, refetch } = useIsConnected();
-  const { wallet } = useWallet();
-  const address = wallet?.address.toB256() || "";
+  const { account } = useAccount();
+
+  const navigate = useNavigate();
 
   const [user, setUser] = useState({
     loggedIn: false,
@@ -22,9 +25,9 @@ export default function Navbar() {
     setMenuOpen(!menuOpen);
   };
 
-  const connectWallet = () => {};
-
-  const disconnectWallet = () => {};
+  useEffect(() => {
+    console.log(account);
+  });
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
@@ -35,8 +38,30 @@ export default function Navbar() {
           </div>
           Velocity
         </Link>
-        <div className="ml-auto hidden lg:flex flex-row items-center text gap-10 text-gray-400">
-          <Link to="/trade">Derivatives</Link>
+        <div className="ml-auto hidden lg:flex flex-row items-center text gap-10 text-white">
+          <Menu>
+            <MenuButton>
+              Derivatives
+              <KeyboardArrowDownIcon />
+            </MenuButton>
+
+            <MenuItems
+              transition
+              anchor="bottom end"
+              className={`z-[100] w-[14rem] origin-top-right rounded mt-2 border p-1 text transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 bg-[#FFFFFF4D] text-white border-white shadow-white/10 hover:bg-[#FFFFFF26] `}
+            >
+              {Object.keys(Symbols).map((key) => (
+                <MenuItem>
+                  <button
+                    onClick={() => navigate(`/trade/${key}`)}
+                    className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3"
+                  >
+                    {key.replace("USD", "")} FUT
+                  </button>
+                </MenuItem>
+              ))}
+            </MenuItems>
+          </Menu>
           <Link to="https://github.com/HackArchive/velocity-finance" target="_blank">
             Documentation
           </Link>
@@ -59,7 +84,7 @@ export default function Navbar() {
                   className={` truncate w-[15rem] items-center gap-2 rounded-md py-2 px-3 text-sm/6 font-semibold  border-[1px] glass border-white justify-center`}
                 >
                   <CgProfile className="w-5 h-5 inline-block mr-2" />
-                  {address}
+                  {account}
                 </MenuButton>
 
                 <MenuItems

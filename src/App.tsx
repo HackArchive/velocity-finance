@@ -5,7 +5,7 @@ import Trade from "./pages/Trade";
 
 export default function App() {
   return (
-    <div>
+    <div className="bg-[#141414] text-white">
       <BrowserRouter>
         <Navbar />
         <Routes>
