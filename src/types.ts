@@ -7,7 +7,7 @@ export enum Symbols {
 export interface Trade {
   orderType: "LONG" | "SHORT";
   symbol: string;
-  tradeSize: number;
+  contractSize: number;
   leverage?: number;
   limitPrice?: number;
   margin?: number;

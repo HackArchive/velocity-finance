@@ -8,6 +8,25 @@ import TradingViewWidget from "../components/TradingView";
 import { Symbols, type Trade } from "../types";
 import { getSymbolPrice } from "../utils/GetSymbolPrice";
 
+const marks = [
+  {
+    value: 1,
+    label: "X1",
+  },
+  {
+    value: 2,
+    label: "X2",
+  },
+  {
+    value: 5,
+    label: "X5",
+  },
+  {
+    value: 10,
+    label: "X10",
+  },
+];
+
 export default function Trade() {
   const { symbol } = useParams();
   const [price, setPrice] = useState<number>(0);
@@ -25,11 +44,11 @@ export default function Trade() {
   const form = useForm<Trade>({
     defaultValues: {
       orderType: "LONG",
-      tradeSize: 0,
-      leverage: 0,
+      contractSize: 1,
+      leverage: 1,
       limitPrice: 0,
       symbol: undefined,
-      margin: 1,
+      margin: 0,
     },
   });
 
@@ -49,6 +68,10 @@ export default function Trade() {
     setValue("symbol", currentSymbol || "");
     setValue("limitPrice", price);
   }, [currentSymbol, price]);
+
+  useEffect(() => {
+    setValue("margin", (trade.contractSize * (price / 1000)) / trade.leverage!);
+  }, [trade.contractSize, trade.leverage, price]);
 
   return (
     <div className="min-h-screen pt-20 lg:px-4 flex flex-row gap-4 text-white">
@@ -77,8 +100,15 @@ export default function Trade() {
 
           <div className="flex flex-col p-4 gap-4 ">
             <div className="flex flex-col">
-              <LabelledTextField label="Trade Size" {...register("tradeSize")} />
-              <span className="pt-1 ml-auto">${trade.tradeSize * price}</span>
+              <div className="flex flex-col w-full text-white">
+                <h1 className="text-[0.9rem] pb-1">Contract Size</h1>
+                <input
+                  {...register("contractSize")}
+                  type="number"
+                  className="border border-gray-600 bg-neutral-800 bg-transparent text-white w-full p-2"
+                />
+              </div>
+              <span className="pt-1 ml-auto truncate w-20 text-left">${trade.contractSize * (price / 1000)}</span>
             </div>
 
             <div className="flex flex-col">
@@ -87,12 +117,21 @@ export default function Trade() {
                 name="leverage"
                 control={form.control}
                 render={({ field }) => (
-                  <Slider {...field} value={Number(field.value)} sx={{ color: "white", width: "95%", ml: 2 }} />
+                  <Slider
+                    {...field}
+                    value={Number(field.value)}
+                    sx={{ color: "white", width: "95%", ml: 2 }}
+                    defaultValue={1}
+                    step={null}
+                    marks={marks}
+                    min={1}
+                    max={10}
+                  />
                 )}
               />
-              <span className="ml-auto">{trade.leverage}%</span>
+              <span className="ml-auto">X{trade.leverage}</span>
             </div>
-            <LabelledTextField label="Price" {...register("limitPrice")} />
+            <LabelledTextField label="Margin" {...register("margin")} disabled />
             <Button
               onClick={handleSubmit(() => setConfirmationModalOpen(true))}
               className="w-full bg-green-400 text-white rounded-none mt-10"
