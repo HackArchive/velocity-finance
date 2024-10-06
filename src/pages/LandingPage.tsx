@@ -4,7 +4,9 @@ import CurrencyBitcoinTwoToneIcon from "@mui/icons-material/CurrencyBitcoinTwoTo
 import SecurityTwoToneIcon from "@mui/icons-material/SecurityTwoTone";
 import ShowChartTwoToneIcon from "@mui/icons-material/ShowChartTwoTone";
 import SyncAltTwoToneIcon from "@mui/icons-material/SyncAltTwoTone";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getSymbolPrice } from "../utils/GetSymbolPrice";
 const features: { icon: JSX.Element; title: string; description: string }[] = [
   {
     icon: <ShowChartTwoToneIcon sx={{ fontSize: "40px", my: 1 }} />,
@@ -46,6 +48,28 @@ const features: { icon: JSX.Element; title: string; description: string }[] = [
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const [bitcoin, useBitcoin] = useState(0);
+  const [eth, useEth] = useState(0);
+  const [solana, useSolana] = useState(0);
+
+  const getPrices = async () => {
+    let ethP = await getSymbolPrice("ETHUSD");
+    let btcP = await getSymbolPrice("BTCUSD");
+    let solP = await getSymbolPrice("SOLUSD");
+
+    useBitcoin(Math.round(btcP * 100)/100);
+    useEth(Math.round(ethP * 100)/100)
+    useSolana(Math.round(solP * 100)/100)
+
+  }
+
+  useEffect(() => {
+    getPrices();
+    const intervalId = setInterval(getPrices, 1000); 
+    return () => clearInterval(intervalId);
+  }, []); 
+
+
   return (
     <div className="min-h-screen">
       <div className="px-5 pt-20">
@@ -61,7 +85,7 @@ export default function LandingPage() {
               &#8226;
               <div className="">
                 <p>Bitcoin</p>
-                <p>61,999</p>
+                <p>{bitcoin}</p>
               </div>
             </div>
           </Link>
@@ -74,7 +98,7 @@ export default function LandingPage() {
               &#8226;
               <div className="">
                 <p>Ethereum</p>
-                <p>61,999</p>
+                <p>{eth}</p>
               </div>
             </div>
           </Link>
@@ -86,7 +110,7 @@ export default function LandingPage() {
               &#8226;
               <div className="">
                 <p>Solana</p>
-                <p>61,999</p>
+                <p>{solana}</p>
               </div>
             </div>
             <img src="/line1.png" alt="" className="w-80 h-20 object-contain" />
@@ -99,7 +123,7 @@ export default function LandingPage() {
               &#8226;
               <div className="">
                 <p>Bitcoin</p>
-                <p>61,999</p>
+                <p>{bitcoin}</p>
               </div>
             </div>
             <img src="/line2.png" alt="" className="w-80 h-20 object-contain" />
