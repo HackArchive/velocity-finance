@@ -5,6 +5,7 @@ export enum Symbols {
 }
 
 export interface Trade {
+  address?: string;
   orderType: "LONG" | "SHORT";
   symbol: string;
   contractSize: number;
