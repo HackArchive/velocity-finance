@@ -101,7 +101,7 @@ export default function Trade() {
           <div className="flex flex-col p-4 gap-4 ">
             <div className="flex flex-col">
               <div className="flex flex-col w-full text-white">
-                <h1 className="text-[0.9rem] pb-1">Contract Size</h1>
+                <h1 className="text-[0.9rem] pb-1">Contract Count</h1>
                 <input
                   {...register("contractSize")}
                   type="number"
