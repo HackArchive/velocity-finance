@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
+import LandingPage from "./pages/LandingPage";
 import Trade from "./pages/Trade";
 
 export default function App() {
@@ -9,7 +9,7 @@ export default function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/trade/:symbol" element={<Trade />} />
         </Routes>
       </BrowserRouter>
