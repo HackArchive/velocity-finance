@@ -12,7 +12,7 @@ import { SimpleFutures } from "../swap-api";
 import { BN } from "fuels";
 import { toast } from "react-toastify";
 
-
+const BASE_ASSET_ID = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07"; 
 const marks = [
   {
     value: 1,
@@ -45,48 +45,21 @@ export default function Trade() {
 
   // const openPosition = async () => {
 
-  //   const ethPrice = await getSymbolPrice("ETHUSD");
+  // const ethPrice = await getSymbolPrice("ETHUSD");
 
-  //   let isLong = true;
-  //   if (trade.orderType === "SHORT") {
-  //     isLong = false;
-  //   }
-  //   const eth_margin = (trade.margin! / ethPrice) * 1000000;
+  // let isLong = true;
+  // if (trade.orderType === "SHORT") {
+  //   isLong = false;
+  // }
+  // const eth_margin = (trade.margin! / ethPrice) * 1000000;
 
-  //   _contract.functions.open_position(1, isLong).callParams({
-  //     forward: [eth_margin, BASE_ASSET_ID],
-  //     gasLimit: new BN(1000000)
+  // _contract.functions.open_position(1, isLong).callParams({
+  //   forward: [eth_margin, BASE_ASSET_ID],
+  //   gasLimit: new BN(1000000)
 
   //   }).call();
   // }
 
-
-  const handleComfimTrade = async () => {
-
-    const data = {
-      "type": trade.orderType === "LONG" ? "buy" : "sell",                     // Type: "buy" or "sell"
-      "price": trade.margin!.toFixed(2),                  // Price of the asset
-      "amount": trade.contractSize,                     // Amount to buy/sell
-      "userAddress": wallet?.address.toString(),   // User's wallet or address
-      "contractAddress": "0x123456789"   // Contract or asset address
-    }
-    
-    const resp = await fetch("http://localhost:3000/order",{
-      method: "POST",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-
-    const jsn = await resp.json();
-    console.log(jsn)
-
-    setConfirmationModalOpen(false);
-    toast.success("Order Placed")
-
-
-}
 
 
   const currentSymbol =
@@ -95,12 +68,12 @@ export default function Trade() {
       .replace("USD", "") || undefined;
 
 
-    // Get current eth Price
-    useEffect(() => {
-      getSymbolPrice("ETHUSD").then((val) => {
-        setValue("ethPrice",val);
-      })
-    }, [])
+  // Get current eth Price
+  useEffect(() => {
+    getSymbolPrice("ETHUSD").then((val) => {
+      setValue("ethPrice", val);
+    })
+  }, [])
 
 
   const form = useForm<Trade>({
@@ -130,8 +103,8 @@ export default function Trade() {
       // Subscribe to a specific topic (if required by your backend)
       socket.send(JSON.stringify({
         "type": "subscribe",
-        "userAddress":wallet?.address.toString()
-    }));
+        "userAddress": wallet?.address.toString()
+      }));
     };
 
     // Handle incoming messages
@@ -179,6 +152,50 @@ export default function Trade() {
   useEffect(() => {
     setValue("margin", (trade.contractSize * (price / 1000)) / trade.leverage!);
   }, [trade.contractSize, trade.leverage, price]);
+
+
+  const handleComfimTrade = async () => {
+
+
+    const ethPrice = await getSymbolPrice("ETHUSD");
+
+    let isLong = true;
+    if (trade.orderType === "SHORT") {
+      isLong = false;
+    }
+    const eth_margin = (trade.margin! / ethPrice) * 1000000;
+
+    await _contract.functions.open_position(1, isLong).callParams({
+      forward: [eth_margin, BASE_ASSET_ID],
+      gasLimit: new BN(1000000)
+
+    }).call();
+
+
+    const data = {
+      "type": trade.orderType === "LONG" ? "buy" : "sell",                     // Type: "buy" or "sell"
+      "price": trade.margin!.toFixed(2),                  // Price of the asset
+      "amount": trade.contractSize,                     // Amount to buy/sell
+      "userAddress": wallet?.address.toString(),   // User's wallet or address
+      "contractAddress": "0x123456789"   // Contract or asset address
+    }
+
+    const resp = await fetch("http://localhost:3000/order", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+
+    const jsn = await resp.json();
+    console.log(jsn)
+
+    setConfirmationModalOpen(false);
+    toast.success("Order Placed")
+
+
+  }
 
   return (
     <div className="min-h-screen pt-20 lg:px-4 flex flex-row gap-4 text-white">
@@ -242,7 +259,7 @@ export default function Trade() {
             <button
               onClick={handleSubmit(() => setConfirmationModalOpen(true))}
               className="w-full glass border py-2 text-white rounded mt-10"
-            > 
+            >
 
               Submit Order
             </button>

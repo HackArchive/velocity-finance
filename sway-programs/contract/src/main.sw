@@ -102,11 +102,11 @@ impl SimpleFutures for Contract {
         let margin = msg_amount();
         // let margin = 1000;
 
-        if isLong == true {
-            require(storage.long.read().isOpen, "Position Not open");
-        } else {
-            require(storage.short.read().isOpen, "Position Not open");
-        }
+        // if isLong == true {
+        //     require(storage.long.read().isOpen, "Position Not open");
+        // } else {
+        //     require(storage.short.read().isOpen, "Position Not open");
+        // }
         
         require(0 < margin, "Ammount cannot be zero");
         require(leverage <= storage.leverageLimit.read(), "Leverage too high");
