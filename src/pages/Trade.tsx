@@ -11,7 +11,7 @@ import TradingViewWidget from "../components/TradingView";
 import { SimpleFutures } from "../swap-api";
 import { Symbols, type Trade } from "../types";
 import { getSymbolPrice } from "../utils/GetSymbolPrice";
-import { trades } from "../utils/TradeModel";
+import { orderBookEntries } from "../utils/TradeModel";
 
 const BASE_ASSET_ID = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07";
 
@@ -199,17 +199,17 @@ export default function Trade() {
                 <h2>Price</h2>
                 <div>Order Type</div>
               </div>
-              {trades
-                .filter((item) => item.symbol === symbol && item.address === account)
+              {orderBookEntries
+                .filter((item) => item.userAddress === account)
                 .slice(0, 5)
                 .map((item) => (
                   <div className="justify-between flex flex-row text-sm">
-                    <h1>{item.symbol.replace("USD", "")}</h1>
-                    <h2>{((item.margin! * item.leverage!) / item.contractSize) * 1000}</h2>
+                    {/* <h1>{item.symbol.replace("USD", "")}</h1> */}
+                    <h2>{item.price}</h2>
                     <div
-                      className={`py-1 px-2 w-20 rounded ${item.orderType === "LONG" ? "bg-[#34c38f2e] text-[#34c38f]" : "bg-[#f46a6a2e] text-[#f46a6a]"}`}
+                      className={`py-1 px-2 w-20 rounded ${item.type === "BUY" ? "bg-[#34c38f2e] text-[#34c38f]" : "bg-[#f46a6a2e] text-[#f46a6a]"}`}
                     >
-                      {item.orderType}
+                      {item.type === "BUY" ? "Long" : "Short"}
                     </div>
                   </div>
                 ))}
@@ -284,14 +284,14 @@ export default function Trade() {
                 <div className="w-full text-right">
                   <h2 className="text-green-400">Long</h2>
                   <div className="flex flex-col gap-1 w-full">
-                    {trades
-                      .filter((item) => item.symbol === symbol && item.orderType === "LONG")
+                    {orderBookEntries
+                      .filter((item) => item.type === "BUY")
                       .slice(0, 5)
                       .map((item) => (
                         <div className="inline-flex justify-between">
-                          <div>{item.contractSize}</div>
+                          {/* <div>{item.contractSize}</div> */}
                           <div className="bg-[#34c38f2e] text-[#34c38f] p-1 text-sm rounded max-w-32 truncate">
-                            {((item.margin! * item.leverage!) / item.contractSize) * 1000}
+                            {item.price}
                           </div>
                         </div>
                       ))}
@@ -300,14 +300,14 @@ export default function Trade() {
                 <div className="w-full">
                   <h2 className="text-red-400">Short</h2>
                   <div className="flex flex-col gap-1 w-full">
-                    {trades
-                      .filter((item) => item.symbol === symbol && item.orderType === "SHORT")
+                    {orderBookEntries
+                      .filter((item) => item.type === "SELL")
                       .slice(0, 5)
                       .map((item) => (
                         <div className="flex flex-row-reverse justify-between">
-                          <div>{item.contractSize}</div>
+                          {/* <div>{item.contractSize}</div> */}
                           <div className="bg-[#f46a6a2e] text-[#f46a6a] p-1 text-sm rounded max-w-32 truncate">
-                            {((item.margin! * item.leverage!) / item.contractSize) * 1000}
+                            {item.price}
                           </div>
                         </div>
                       ))}

@@ -14,3 +14,13 @@ export interface Trade {
   margin?: number;
   ethPrice: number;
 }
+
+export interface OrderBook {
+  id: string;
+  type: string;
+  price: string;
+  amount: string;
+  userAddress: string;
+  contractAddress: string;
+  timestamp: string;
+}
