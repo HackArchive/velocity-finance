@@ -104,7 +104,7 @@ export default function Trade() {
       );
     };
 
-    console.log(orderBookEntries)
+    console.log(orderBookEntries);
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -186,24 +186,21 @@ export default function Trade() {
     toast.success("Order Placed");
   };
 
-
   const getOrderBookEntries = async () => {
-  
     const resp = await fetch("http://localhost:3000/orders", {
       method: "GET",
     });
 
     const jsn: OrderBook[] = await resp.json();
     console.log(jsn);
-    setOrderBookEntries(jsn)
-   
+    setOrderBookEntries(jsn);
   };
 
   useEffect(() => {
     getOrderBookEntries();
-    const intervalId = setInterval(getOrderBookEntries, 5000); 
+    const intervalId = setInterval(getOrderBookEntries, 5000);
     return () => clearInterval(intervalId);
-  }, []); 
+  }, []);
 
   return (
     <div className="min-h-screen py-20 lg:px-4  text-white">
@@ -311,9 +308,9 @@ export default function Trade() {
                       .filter((item) => item.type === "buy")
                       .slice(0, 5)
                       .map((item) => (
-                        <div className="inline-flex justify-end">
-                          {/* <div>{item.contractSize}</div> */}
-                          <div className="bg-[#34c38f2e] text-[#34c38f] p-1 text-sm rounded max-w-32 truncate">
+                        <div className="inline-flex justify-between">
+                          <div>{item.amount}</div>
+                          <div className="bg-[#34c38f2e] text-[#34c38f] p-1 text-sm rounded w-28 truncate">
                             {item.price}
                           </div>
                         </div>
@@ -327,9 +324,9 @@ export default function Trade() {
                       .filter((item) => item.type === "sell")
                       .slice(0, 5)
                       .map((item) => (
-                        <div className="flex flex-row-reverse justify-end">
-                          {/* <div>{item.contractSize}</div> */}
-                          <div className="bg-[#f46a6a2e] text-[#f46a6a] p-1 text-sm rounded max-w-32 truncate">
+                        <div className="flex flex-row-reverse justify-between">
+                          <div>{item.amount}</div>
+                          <div className="bg-[#f46a6a2e] text-[#f46a6a] p-1 text-sm rounded w-28 truncate">
                             {item.price}
                           </div>
                         </div>
