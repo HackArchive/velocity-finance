@@ -205,6 +205,7 @@ export default function Trade() {
                 .map((item) => (
                   <div className="justify-between flex flex-row text-sm">
                     {/* <h1>{item.symbol.replace("USD", "")}</h1> */}
+                    <h1>ETH</h1>
                     <h2>{item.price}</h2>
                     <div
                       className={`py-1 px-2 w-20 rounded ${item.type === "BUY" ? "bg-[#34c38f2e] text-[#34c38f]" : "bg-[#f46a6a2e] text-[#f46a6a]"}`}
@@ -285,10 +286,10 @@ export default function Trade() {
                   <h2 className="text-green-400">Long</h2>
                   <div className="flex flex-col gap-1 w-full">
                     {orderBookEntries
-                      .filter((item) => item.type === "BUY")
+                      .filter((item) => item.type === "buy")
                       .slice(0, 5)
                       .map((item) => (
-                        <div className="inline-flex justify-between">
+                        <div className="inline-flex justify-end">
                           {/* <div>{item.contractSize}</div> */}
                           <div className="bg-[#34c38f2e] text-[#34c38f] p-1 text-sm rounded max-w-32 truncate">
                             {item.price}
@@ -301,10 +302,10 @@ export default function Trade() {
                   <h2 className="text-red-400">Short</h2>
                   <div className="flex flex-col gap-1 w-full">
                     {orderBookEntries
-                      .filter((item) => item.type === "SELL")
+                      .filter((item) => item.type === "sell")
                       .slice(0, 5)
                       .map((item) => (
-                        <div className="flex flex-row-reverse justify-between">
+                        <div className="flex flex-row-reverse justify-end">
                           {/* <div>{item.contractSize}</div> */}
                           <div className="bg-[#f46a6a2e] text-[#f46a6a] p-1 text-sm rounded max-w-32 truncate">
                             {item.price}
