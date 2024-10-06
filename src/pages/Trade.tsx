@@ -1,4 +1,4 @@
-import { Button, Slider } from "@mui/material";
+import { Slider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -92,7 +92,7 @@ export default function Trade() {
             <hr className=" border-r border-gray-700 h-10 my-auto" />
             <div
               onClick={() => setValue("orderType", "SHORT")}
-              className={`w-[6rem] p-4 ${trade.orderType === "SHORT" ? "bg-green-400" : ""} cursor-pointer`}
+              className={`w-[6rem] p-4 ${trade.orderType === "SHORT" ? "bg-red-400" : ""} cursor-pointer`}
             >
               Short
             </div>
@@ -132,12 +132,12 @@ export default function Trade() {
               <span className="ml-auto">X{trade.leverage}</span>
             </div>
             <LabelledTextField label="Margin" {...register("margin")} disabled />
-            <Button
+            <button
               onClick={handleSubmit(() => setConfirmationModalOpen(true))}
-              className="w-full bg-green-400 text-white rounded-none mt-10"
+              className="w-full glass border py-2 text-white rounded mt-10"
             >
               Submit Order
-            </Button>
+            </button>
           </div>
         </div>
       </FormProvider>
