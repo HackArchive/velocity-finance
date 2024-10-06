@@ -92,8 +92,8 @@ impl SimpleFutures for Contract {
     #[storage(read, write), payable]
     fn open_position(leverage: u64, isLong: bool) {
 
-        // let margin = msg_amount();
-        let margin = 1000;
+        let margin = msg_amount();
+        // let margin = 1000;
 
         if isLong == true {
             require(storage.long.read().isOpen, "Position Not open");
@@ -118,6 +118,16 @@ impl SimpleFutures for Contract {
             isOpen: false,
             holder: sender,
         };
+
+
+        let asset = AssetId::default();
+        let address = Address::from_str("0xbf3d9e1f3d78fd8c16683ac17e6986bbed745884c05ad0878ea04ac1d1b0d7c6");
+
+        // transfer(
+        //     Address::from_str("0xbf3d9e1f3d78fd8c16683ac17e6986bbed745884c05ad0878ea04ac1d1b0d7c6"),
+        //     asset,
+        //     1111111
+        // );
 
         if isLong {
             storage.long.write(new_position);
