@@ -21,6 +21,11 @@ Velocity Finance is built on the **Fuel Network's** high-speed and low-fee infra
 
 In summary, Velocity Finance is committed to empowering users with innovative trading solutions, robust security measures, and an open-source codebase that promotes transparency and community trust. As we continue to develop and grow, we invite traders, developers, and enthusiasts to join us on this exciting journey toward revolutionizing the decentralized derivatives market.
 
+# Demo
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PuNR5qagCA8?si=pAII5yheuOwleser&amp;start=365" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
 ### Market Availability
 - **Current Markets**: ETH/USD, BTC/USD, SOL/USD
 - **Future Expansion**: Additional trading pairs and features based on user demand.
